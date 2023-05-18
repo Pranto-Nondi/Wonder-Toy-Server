@@ -33,14 +33,30 @@ async function run() {
             }
         });
         const kidsToySet = client.db('kidsToyDb').collection('toysCollection');
-        // const bookingsSet = client.db('allBooking').collection('services');
 
+        app.post('/addToys', async (req, res) => {
+            const addedToys = req.body;
+            console.log(addedToys);
+            const result = await kidsToySet.insertOne(addedToys);
+            res.send(result);
+        });
+        app.get('/myToys/:email', async (req, res) => {
 
+            const result = await kidsToySet
+                .find({
+                    email: req.params.email,
+                })
+                .toArray();
+            res.send(result);
+        })
 
-        // service
+        app.get("/allToys", async (req, res) => {
+            const result = await kidsToySet
+                .find({})
+                .toArray();
+            res.send(result);
+        });
 
-
-        // bookings
 
 
         // Send a ping to confirm a successful connection
