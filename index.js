@@ -70,7 +70,7 @@ async function run() {
             res.send(result);
         });
         app.get("/allToys", async (req, res) => {
-            const limit = parseInt(req.query.limit) || 3; // Parse the limit parameter to an integer
+            const limit = parseInt(req.query.limit) || 20; // Parse the limit parameter to an integer
             console.log("Received limit:", limit);
             try {
                 const result = await kidsToySet.find().limit(limit).toArray();
