@@ -50,12 +50,12 @@ async function run() {
             res.send(result);
         })
 
-        app.get("/allToys", async (req, res) => {
-            const result = await kidsToySet
-                .find({})
-                .toArray();
-            res.send(result);
-        });
+        // app.get("/allToys", async (req, res) => {
+        //     const result = await kidsToySet
+        //         .find({})
+        //         .toArray();
+        //     res.send(result);
+        // });
         app.get("/allToys/:text", async (req, res) => {
             const text = req.params.text;
             console.log(text)
@@ -68,6 +68,17 @@ async function run() {
                 })
                 .toArray();
             res.send(result);
+        });
+        app.get("/allToys", async (req, res) => {
+            const limit = parseInt(req.query.limit) || 3; // Parse the limit parameter to an integer
+            console.log("Received limit:", limit);
+            try {
+                const result = await kidsToySet.find().limit(limit).toArray();
+                res.send(result);
+            } catch (error) {
+                console.error("Error retrieving toys:", error);
+                res.status(500).send({ error: "Internal server error" });
+            }
         });
 
 
