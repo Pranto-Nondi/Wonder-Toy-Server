@@ -56,6 +56,19 @@ async function run() {
                 .toArray();
             res.send(result);
         });
+        app.get("/allToys/:text", async (req, res) => {
+            const text = req.params.text;
+            console.log(text)
+            const result = await kidsToySet
+                .find({
+                    $or: [
+                        { name: { $regex: text, $options: "i" } },
+
+                    ],
+                })
+                .toArray();
+            res.send(result);
+        });
 
 
 
