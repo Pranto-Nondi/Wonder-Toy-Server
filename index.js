@@ -33,7 +33,7 @@ async function run() {
             }
         });
         const kidsToySet = client.db('kidsToyDb').collection('toysCollection');
-
+        
         app.post('/addToys', async (req, res) => {
             const addedToys = req.body;
             console.log(addedToys);
