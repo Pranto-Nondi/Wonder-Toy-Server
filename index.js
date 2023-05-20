@@ -118,6 +118,24 @@ async function run() {
 
         })
 
+        app.post('/sortToys', async (req, res) => {
+            try {
+                const userEmail = req.body.userEmail;
+                const sortOrder = req.body.sortOrder === 'ascending' ? 1 : -1;
+
+                const sortedToys = await kidsToySet.find({ userEmail }).sort({ price: sortOrder }).toArray();
+                res.json(sortedToys);
+            } catch (error) {
+                console.error('Error sorting toys:', error);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
+        });
+
+
+
+
+
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
