@@ -33,7 +33,7 @@ async function run() {
             }
         });
         const kidsToySet = client.db('kidsToyDb').collection('toysCollection');
-        
+
         app.post('/addToys', async (req, res) => {
             const addedToys = req.body;
             console.log(addedToys);
@@ -81,7 +81,28 @@ async function run() {
             }
         });
 
+        app.put("/updateToy/:id", async (req, res) => {
+            const id = req.params.id;
+            const body = req.body;
+            console.log(body);
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    price: body.price,
+                    quantity: body.quantity,
+                    description: body.description,
+                },
+            };
+            const result = await kidsToySet.updateOne(filter, updateDoc);
+            res.send(result);
+        });
+        app.delete('/deleteToy/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await kidsToySet.deleteOne(query)
+            res.send(result)
 
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
