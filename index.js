@@ -87,6 +87,13 @@ async function run() {
             });
             res.send(result);
         });
+        app.get("/toyTabDetails/:id", async (req, res) => {
+            console.log(req.params.id);
+            const result = await kidsToySet.findOne({
+                _id: new ObjectId(req.params.id),
+            });
+            res.send(result);
+        });
 
         app.put("/updateToy/:id", async (req, res) => {
             const id = req.params.id;
