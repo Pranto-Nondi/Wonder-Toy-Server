@@ -34,12 +34,7 @@ async function run() {
         });
         const kidsToySet = client.db('kidsToyDb').collection('toysCollection');
 
-        app.post('/addToys', async (req, res) => {
-            const addedToys = req.body;
-            console.log(addedToys);
-            const result = await kidsToySet.insertOne(addedToys);
-            res.send(result);
-        });
+
         app.get('/myToys/:email', async (req, res) => {
 
             const result = await kidsToySet
@@ -50,15 +45,10 @@ async function run() {
             res.send(result);
         })
 
-        // app.get("/allToys", async (req, res) => {
-        //     const result = await kidsToySet
-        //         .find({})
-        //         .toArray();
-        //     res.send(result);
-        // });
+
         app.get("/allToys/:text", async (req, res) => {
             const text = req.params.text;
-            console.log(text)
+           
             const result = await kidsToySet
                 .find({
                     $or: [
@@ -71,7 +61,7 @@ async function run() {
         });
         app.get("/allToys", async (req, res) => {
             const limit = parseInt(req.query.limit) || 20; // Parse the limit parameter to an integer
-            console.log("Received limit:", limit);
+          
             try {
                 const result = await kidsToySet.find().limit(limit).toArray();
                 res.send(result);
@@ -81,24 +71,29 @@ async function run() {
             }
         });
         app.get("/allToySingleInfo/:id", async (req, res) => {
-            console.log(req.params.id);
+          
             const result = await kidsToySet.findOne({
                 _id: new ObjectId(req.params.id),
             });
             res.send(result);
         });
         app.get("/toyTabDetails/:id", async (req, res) => {
-            console.log(req.params.id);
+          
             const result = await kidsToySet.findOne({
                 _id: new ObjectId(req.params.id),
             });
             res.send(result);
         });
-
+        app.post('/addToys', async (req, res) => {
+            const addedToys = req.body;
+           
+            const result = await kidsToySet.insertOne(addedToys);
+            res.send(result);
+        });
         app.put("/updateToy/:id", async (req, res) => {
             const id = req.params.id;
             const body = req.body;
-            console.log(body);
+           
             const filter = { _id: new ObjectId(id) };
             const updateDoc = {
                 $set: {
