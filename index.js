@@ -48,7 +48,7 @@ async function run() {
 
         app.get("/allToys/:text", async (req, res) => {
             const text = req.params.text;
-           
+
             const result = await kidsToySet
                 .find({
                     $or: [
@@ -59,9 +59,9 @@ async function run() {
                 .toArray();
             res.send(result);
         });
+
         app.get("/allToys", async (req, res) => {
-            const limit = parseInt(req.query.limit) || 20; // Parse the limit parameter to an integer
-          
+            const limit = req.query.showAll === "true" ? 9999 : parseInt(req.query.limit) || 20; 
             try {
                 const result = await kidsToySet.find().limit(limit).toArray();
                 res.send(result);
@@ -70,15 +70,29 @@ async function run() {
                 res.status(500).send({ error: "Internal server error" });
             }
         });
+
+
+
+        app.get("/allToys/showAll", async (req, res) => {
+            try {
+                const result = await kidsToySet.find().toArray();
+                res.send(result);
+            } catch (error) {
+                console.error("Error retrieving toys:", error);
+                res.status(500).send({ error: "Internal server error" });
+            }
+        });
+
+
         app.get("/allToySingleInfo/:id", async (req, res) => {
-          
+
             const result = await kidsToySet.findOne({
                 _id: new ObjectId(req.params.id),
             });
             res.send(result);
         });
         app.get("/toyTabDetails/:id", async (req, res) => {
-          
+
             const result = await kidsToySet.findOne({
                 _id: new ObjectId(req.params.id),
             });
@@ -86,14 +100,14 @@ async function run() {
         });
         app.post('/addToys', async (req, res) => {
             const addedToys = req.body;
-           
+
             const result = await kidsToySet.insertOne(addedToys);
             res.send(result);
         });
         app.put("/updateToy/:id", async (req, res) => {
             const id = req.params.id;
             const body = req.body;
-           
+
             const filter = { _id: new ObjectId(id) };
             const updateDoc = {
                 $set: {
